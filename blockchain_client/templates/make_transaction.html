@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blockchain App</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../static/css/styles.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  </head>
+  <body data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand flex-grow-1" href="/">Blockchain</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarScroll"
+          aria-controls="navbarScroll"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse flex-grow-0" id="navbarScroll">
+          <ul
+            class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll"
+            style="--bs-scroll-height: 100px"
+          >
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/"
+                >Wallet Generator</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/make_transaction"
+                >Make Transaction</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/view_transactions">View Transaction</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container center">
+      <h1>Transaction</h1>
+      <p class="text-muted">
+        Enter the requirment detail and click the button to Make the Transaction
+      </p>
+
+      <div class="card w-75">
+        <div class="card-body text-center">
+          <form id="transaction_form">
+            <div class="input-group">
+              <span class="input-group-text w-25">Sender Public Key</span>
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                id="sender_public_key"
+                name="sender_public_key"
+              />
+            </div>
+
+            <div class="input-group mt-4">
+              <span class="input-group-text w-25">Sender Private Key</span>
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                id="sender_private_key"
+                name="sender_private_key"
+              />
+            </div>
+
+            <div class="input-group mt-4">
+              <span class="input-group-text w-25">Recipient Public Key</span>
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                id="recipient_public_key"
+                name="recipient_public_key"
+              />
+            </div>
+
+            <div class="input-group mt-4">
+              <span class="input-group-text w-25">Value</span>
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                id="value"
+                name="value"
+              />
+            </div>
+
+            <button class="btn btn-lg btn-primary mt-4" id="transaction">
+              Transaction
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="mt-3" id="confirm_alert_div"></div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="confirmModal"
+      tabindex="-1"
+      aria-labelledby="confirmModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="confirmModalLabel">
+              Confirm Transaction Detail
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="confirm_form">
+              <div class="input-group my-2">
+                <span class="input-group-text">Confirmation Sender Key</span>
+                <input
+                  type="text"
+                  class="form-control"
+                  aria-label="confirmation_sender_key"
+                  aria-describedby="basic-addon1"
+                  readonly
+                  name="confirmation_sender_key"
+                  id="confirmation_sender_key"
+                />
+              </div>
+
+              <div class="input-group my-2">
+                <span class="input-group-text">Confirmation Recipient Key</span>
+                <input
+                  type="text"
+                  class="form-control"
+                  aria-label="confirmation_recipient_key"
+                  aria-describedby="basic-addon1"
+                  readonly
+                  name="confirmation_recipient_key"
+                  id="confirmation_recipient_key"
+                />
+              </div>
+
+              <div class="input-group my-2">
+                <span class="input-group-text">Confirmation Value</span>
+                <input
+                  type="text"
+                  class="form-control"
+                  aria-label="confirmation_value"
+                  aria-describedby="basic-addon1"
+                  readonly
+                  name="confirmation_value"
+                  id="confirmation_value"
+                />
+              </div>
+
+              <div class="input-group my-2">
+                <span class="input-group-text">Transaction Signature</span>
+                <input
+                  type="text"
+                  class="form-control"
+                  aria-label="transaction_signature"
+                  aria-describedby="basic-addon1"
+                  readonly
+                  name="transaction_signature"
+                  id="transaction_signature"
+                />
+              </div>
+
+              <div class="input-group my-2">
+                <span class="input-group-text">Blockchain Node</span>
+                <input
+                  type="text"
+                  class="form-control"
+                  aria-label="node_url"
+                  aria-describedby="basic-addon1"
+                  readonly
+                  name="node_url"
+                  id="node_url"
+                  value="http://localhost:5001"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-success" id="confirm_button">
+              Confirm
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+      integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
+      integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      $(function () {
+        $("#transaction").click(function (event) {
+          event.preventDefault();
+          $.ajax({
+            url: "/generate/transaction",
+            type: "POST",
+            dataType: "json",
+            data: $("#transaction_form").serialize(),
+            success: function (res) {
+              const { transaction, sign } = res;
+              document.getElementById("confirmation_sender_key").value =
+                transaction.sender_public_key;
+              document.getElementById("confirmation_recipient_key").value =
+                transaction.recipient_address;
+              document.getElementById("confirmation_value").value =
+                transaction.value;
+              document.getElementById("transaction_signature").value = sign;
+
+              $("#confirmModal").modal("show");
+            },
+            error: function (error) {
+              console.log("error", error);
+            },
+          });
+        });
+
+        $("#confirm_button").click(() => {
+          const nodeUrl = document.getElementById("node_url").value;
+          const url = nodeUrl + "/transactions/new";
+          const alert_container = document.getElementById("confirm_alert_div");
+
+          const alert = (message, type) => {
+            const wrapper = document.createElement("div");
+            wrapper.innerHTML = [
+              `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+              `   <div>${message}</div>`,
+              '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+              "</div>",
+            ].join("");
+
+            alert_container.append(wrapper);
+          };
+
+          $.ajax({
+            url: url,
+            type: "POST",
+            dataType: "json",
+            headers: { "Access-Control-Allow-Origin": "*" },
+            data: $("#confirm_form").serialize(),
+            success: function (res) {
+              $("#sender_public_key").val("");
+              $("#sender_private_key").val("");
+              $("#recipient_public_key").val("");
+              $("#value").val("");
+              $("#confirmModal").modal("hide");
+              alert("Successful Transaction", "success");
+            },
+            error: function (error) {
+              alert("Transactions had Error", "danger");
+              console.log("error", error);
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
